@@ -1,6 +1,8 @@
+from re import T
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
+import random
 from django.urls import reverse
 
 from . import util
@@ -50,11 +52,18 @@ def search(request):
     if request.method == "POST":
         list = []
         txtsearch = request.POST['q']
-        print(txtsearch)
         for txt in util.list_entries():
             if txtsearch.capitalize() in txt.capitalize():
-                list.append(util.get_entry(txt))
+                list.append({'entry':util.get_entry(txt),'title':txt})
         return render(request, "encyclopedia/search.html", {
-            "entries": list})
+            "entries": list,
+            "textsearch":txtsearch
+            })
     else:
         return render(request, "encyclopedia/search.html")
+
+def randompage(request):
+    title = random.choice(util.list_entries())
+    return render(request, "encyclopedia/randompage.html", {
+            "entry": util.get_entry(title),
+            "title": title})
