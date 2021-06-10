@@ -7,8 +7,8 @@ from . import util
 
 
 class NewPageForm(forms.Form):
-    title = forms.CharField(label="Title")
-    content = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
+    title = forms.CharField(label="Title", required="true")
+    content = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}), required="true")
 
 
 def index(request):
@@ -48,11 +48,13 @@ def entrypage(request, title):
 
 def search(request):
     if request.method == "POST":
-        
-        if util.get_entry(request.POST['title']) is None:
-            return render(request, "encyclopedia/error404s.html")
+        list = []
+        txtsearch = request.POST['q']
+        print(txtsearch)
+        for txt in util.list_entries():
+            if txtsearch.capitalize() in txt.capitalize():
+                list.append(util.get_entry(txt))
         return render(request, "encyclopedia/search.html", {
-            "entry": util.get_entry(request.POST['title'])})
+            "entries": list})
     else:
-        return render(request, "encyclopedia/search.html", {
-            "entry": util.get_entry(title)})
+        return render(request, "encyclopedia/search.html")

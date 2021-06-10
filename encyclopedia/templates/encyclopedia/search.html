@@ -5,16 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>New page </h1>
-    <form action="{% url 'search' %}" method="POST">
-        <!-- <input type="text", name="task" placeholder="title" required>
-        <input type="text", name="content" placeholder="Content" required>
-       -->
-       {% csrf_token %}
-       {{ form }}
-
-        <input type="submit">
-    </form>
-   <h3>{{ title }}</h3>
-    <p>{{ content }}</p>
+    <h1>search Result</h1>
+    {% for l in entries%}
+      <h3>{{ l.title }}</h3>
+      <p>{{ l.content }}</p>
+    {% endfor %}
 {% endblock %}
